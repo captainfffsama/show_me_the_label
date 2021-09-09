@@ -1,0 +1,4 @@
+dash
+pillow
+dash-daq
+plotly>=5.3.1
