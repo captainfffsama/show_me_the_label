@@ -5,6 +5,7 @@
 @Description: 用于放一些工具函数
 '''
 
+from genericpath import isfile
 import os
 from functools import lru_cache
 import xml.etree.ElementTree as ET
@@ -16,11 +17,18 @@ import plotly.graph_objects as go
 
 
 @lru_cache(None)
-def get_all_file_path(file_dir: str, filter_: tuple = ('.jpg', )) -> list:
+def get_all_file_path(file_dir: str, filter_: tuple = ('.jpg', '.JPG','.png','.PNG','.jpeg','.JPEG')) -> list:
     #遍历文件夹下所有的file
-    return [os.path.join(maindir,filename) for maindir,_,file_name_list in os.walk(file_dir) \
-            for filename in file_name_list \
-            if os.path.splitext(filename)[1] in filter_ ]
+    if os.path.isdir(file_dir):
+        return [os.path.join(maindir,filename) for maindir,_,file_name_list in os.walk(file_dir) \
+                for filename in file_name_list \
+                if os.path.splitext(filename)[1] in filter_ ]
+    else:
+        with open(file_dir, 'r') as fr:
+            file_list=[x.strip() for x in fr.readlines() if os.path.splitext(x.strip()) in filter_]
+
+        return file_list
+        
 
 
 def get_callback_id(no_attr=True):
