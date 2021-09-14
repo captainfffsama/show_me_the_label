@@ -8,6 +8,7 @@
 # Run this app with `python app.py` and
 # visit http://127.0.0.1:8050/ in your web browser.
 import os
+import imghdr
 
 import dash
 from dash import dcc, html
@@ -98,7 +99,10 @@ def update_w_show_input_div(w_dir_input: str):
         if os.path.isdir(w_dir_input):
             all_img_path = utils.get_all_file_path(w_dir_input)
         else:
-            all_img_path = [w_dir_input]
+            if imghdr.what(w_dir_input):
+                all_img_path = [w_dir_input]
+            else:
+                all_img_path = utils.get_all_file_path(w_dir_input)
 
     else:
         info = "{} 路径不存在!!! \n".format(w_dir_input)
